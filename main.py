@@ -306,13 +306,55 @@ def criar_grafo_completo(n):
     return grafo
 
 
-def executar_busca_caminho(grafo, nome_exemplo):
+def tentar_visualizacao(grafo, caminho, nome_exemplo):
+    """
+    Tenta criar uma visualização do grafo usando o módulo view.py.
+    
+    Args:
+        grafo (Grafo): Instância do grafo
+        caminho (List[int] ou None): Caminho hamiltoniano encontrado
+        nome_exemplo (str): Nome do exemplo para o arquivo
+    """
+    try:
+        from view import VisualizadorGrafo
+        
+        print(f"\n📊 Criando visualização: {nome_exemplo}")
+        
+        # Cria visualizador
+        visualizador = VisualizadorGrafo(grafo)
+        
+        # Gera nome do arquivo baseado no exemplo
+        nome_arquivo = nome_exemplo.lower().replace(" ", "_").replace(":", "")
+        
+        # Cria visualização
+        arquivo_salvo = visualizador.visualizar_grafo_completo(
+            caminho=caminho,
+            titulo=nome_exemplo,
+            salvar=True,
+            nome_arquivo=nome_arquivo,
+            mostrar=False  # Não mostra para não interromper execução em lote
+        )
+        
+        if arquivo_salvo:
+            print(f"✓ Visualização salva em: {arquivo_salvo}")
+        else:
+            print("✗ Erro ao salvar visualização")
+            
+    except ImportError:
+        print("📊 Visualização não disponível. Para ativar, instale as dependências:")
+        print("   pip install -r requirements.txt")
+    except Exception as e:
+        print(f"📊 Erro na visualização: {e}")
+
+
+def executar_busca_caminho(grafo, nome_exemplo, mostrar_visualizacao=True):
     """
     Executa a busca por caminho hamiltoniano em um grafo.
     
     Args:
         grafo (Grafo): Grafo para analisar
         nome_exemplo (str): Nome do exemplo para exibição
+        mostrar_visualizacao (bool): Se deve tentar mostrar visualização
     """
     print(f"\n--- Busca por Caminho Hamiltoniano: {nome_exemplo} ---")
     
@@ -337,6 +379,10 @@ def executar_busca_caminho(grafo, nome_exemplo):
         
     else:
         print("✗ Nenhum Caminho Hamiltoniano encontrado")
+    
+    # Tentativa de visualização (se bibliotecas estiverem disponíveis)
+    if mostrar_visualizacao and grafo.num_vertices <= 10:  # Limita visualização para grafos pequenos
+        tentar_visualizacao(grafo, caminho if encontrou else None, nome_exemplo)
 
 
 def menu_interativo():
@@ -352,10 +398,11 @@ def menu_interativo():
         print("1. Criar grafo personalizado")
         print("2. Executar exemplos predefinidos")
         print("3. Testar grafo completo")
-        print("4. Sair")
+        print("4. Gerar visualizações de exemplo")
+        print("5. Sair")
         
         try:
-            opcao = input("\nEscolha uma opção (1-4): ").strip()
+            opcao = input("\nEscolha uma opção (1-5): ").strip()
             
             if opcao == '1':
                 criar_grafo_personalizado()
@@ -364,6 +411,8 @@ def menu_interativo():
             elif opcao == '3':
                 testar_grafo_completo()
             elif opcao == '4':
+                gerar_visualizacoes_exemplo()
+            elif opcao == '5':
                 print("Encerrando programa...")
                 break
             else:
@@ -463,6 +512,33 @@ def executar_exemplos():
     # Exemplo 4: Grafo completo pequeno
     grafo4 = criar_grafo_completo(4)
     executar_busca_caminho(grafo4, "Grafo Completo K4")
+
+
+def gerar_visualizacoes_exemplo():
+    """
+    Gera visualizações de todos os exemplos usando o módulo view.py.
+    """
+    try:
+        from view import criar_visualizacoes_exemplo
+        
+        print("\n" + "="*60)
+        print("GERANDO VISUALIZAÇÕES DE EXEMPLO")
+        print("="*60)
+        print("\nEsta função criará visualizações PNG de vários exemplos de grafos.")
+        print("As imagens serão salvas na pasta 'assets/'.")
+        
+        confirmacao = input("\nDeseja continuar? (s/n): ").strip().lower()
+        if confirmacao in ['s', 'sim', 'y', 'yes']:
+            criar_visualizacoes_exemplo()
+        else:
+            print("Operação cancelada.")
+            
+    except ImportError:
+        print("\n❌ Módulo de visualização não disponível.")
+        print("Para usar esta funcionalidade, instale as dependências:")
+        print("   pip install -r requirements.txt")
+    except Exception as e:
+        print(f"\n❌ Erro ao gerar visualizações: {e}")
 
 
 def main():

@@ -43,7 +43,29 @@ O algoritmo implementado utiliza a técnica de **backtracking** (retrocesso) par
 ### Pré-requisitos
 
 - **Python 3.6+** instalado no sistema
-- Nenhuma biblioteca externa necessária (usa apenas bibliotecas padrão do Python)
+- **Bibliotecas opcionais** para visualização (recomendado):
+  - NetworkX >= 3.0
+  - Matplotlib >= 3.7.0
+  - NumPy >= 1.24.0
+
+### Instalação das Dependências
+
+**Para funcionalidade básica** (apenas algoritmo):
+```bash
+# Nenhuma instalação necessária - usa apenas bibliotecas padrão do Python
+python main.py
+```
+
+**Para funcionalidade completa** (com visualização):
+```bash
+# Instala as dependências de visualização
+pip install -r requirements.txt
+```
+
+Ou instale manualmente:
+```bash
+pip install networkx matplotlib numpy
+```
 
 ### Instruções para Execução Local
 
@@ -53,13 +75,18 @@ O algoritmo implementado utiliza a técnica de **backtracking** (retrocesso) par
    cd FPAA_Caminho_Hamiltoniano
    ```
 
-2. **Execute o programa principal**:
+2. **Instale as dependências (opcional, mas recomendado)**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Execute o programa principal**:
    ```bash
    python main.py
    ```
 
-3. **Navegue pelo menu interativo**:
-   - O programa apresentará um menu com 4 opções
+4. **Navegue pelo menu interativo**:
+   - O programa apresentará um menu com 5 opções
    - Escolha a opção desejada digitando o número correspondente
    - Siga as instruções na tela para cada funcionalidade
 
@@ -68,7 +95,35 @@ O algoritmo implementado utiliza a técnica de **backtracking** (retrocesso) par
 - **Opção 1**: Criar grafo personalizado (permite definir vértices e arestas)
 - **Opção 2**: Executar exemplos predefinidos (demonstra diferentes cenários)
 - **Opção 3**: Testar grafo completo (testa grafos completos K_n)
-- **Opção 4**: Sair do programa
+- **Opção 4**: Gerar visualizações de exemplo (cria imagens PNG dos grafos)
+- **Opção 5**: Sair do programa
+
+### 📊 Funcionalidades de Visualização
+
+O programa inclui um sistema completo de visualização que:
+
+- **Desenha grafos**: Mostra todos os nós e arestas com etiquetas
+- **Destaca caminhos**: Realça o Caminho Hamiltoniano encontrado
+- **Salva imagens**: Exporta visualizações como arquivos PNG
+- **Suporta diferentes layouts**: Spring, circular, planar, etc.
+- **Adiciona legendas**: Explica cores e símbolos utilizados
+
+#### Gerando Visualizações:
+
+**Opção 1**: Via menu interativo
+```bash
+python main.py
+# Escolha opção 4: "Gerar visualizações de exemplo"
+```
+
+**Opção 2**: Diretamente via módulo de visualização
+```bash
+python view.py
+```
+
+**Opção 3**: Automática durante execução
+- As visualizações são geradas automaticamente ao executar exemplos
+- Imagens salvas na pasta `assets/`
 
 ### Exemplo de Execução:
 
@@ -83,9 +138,23 @@ Opções:
 1. Criar grafo personalizado
 2. Executar exemplos predefinidos
 3. Testar grafo completo
-4. Sair
+4. Gerar visualizações de exemplo
+5. Sair
 
-Escolha uma opção (1-4): 2
+Escolha uma opção (1-5): 4
+
+============================================================
+GERANDO VISUALIZAÇÕES DE EXEMPLO
+============================================================
+
+Deseja continuar? (s/n): s
+
+1. Criando exemplo: Grafo com Caminho Hamiltoniano
+✓ Visualização salva em: assets\exemplo1_grafo_com_caminho.png
+
+2. Criando exemplo: Grafo Orientado  
+✓ Visualização salva em: assets\exemplo2_grafo_orientado.png
+```
 ```
 
 ---
@@ -283,15 +352,94 @@ O algoritmo implementado oferece uma solução exata para o Problema do Caminho 
 - ✅ Criação de **grafos personalizados**
 - ✅ Geração de **grafos completos**
 - ✅ Representação por **matriz de adjacência**
-- ✅ Visualização da estrutura do grafo
+- ✅ **Visualização gráfica** com NetworkX e Matplotlib
+- ✅ **Exportação de imagens** PNG de alta qualidade
+- ✅ **Destaque automático** de Caminhos Hamiltonianos encontrados
+
+## 🎨 Sistema de Visualização
+
+O projeto inclui um módulo completo de visualização (`view.py`) que utiliza **NetworkX** e **Matplotlib** para criar representações gráficas dos grafos e destacar os Caminhos Hamiltonianos.
+
+### Características da Visualização:
+
+#### 🎯 **Elementos Visuais:**
+- **Nós (Vértices)**: Círculos coloridos com números identificadores
+- **Arestas**: Linhas conectando os vértices
+- **Direcionamento**: Setas para grafos orientados
+- **Legenda**: Explicação dos elementos visuais
+
+#### 🌈 **Sistema de Cores:**
+- **Nós normais**: Azul claro (`#87CEEB`)
+- **Início do caminho**: Verde (`#32CD32`)
+- **Fim do caminho**: Vermelho (`#FF6347`)
+- **Nós intermediários**: Dourado (`#FFD700`)
+- **Arestas normais**: Cinza (`#696969`)
+- **Caminho Hamiltoniano**: Laranja-vermelho (`#FF4500`)
+
+#### 📐 **Layouts Disponíveis:**
+- **Spring**: Distribuição baseada em forças físicas (padrão)
+- **Circular**: Vértices dispostos em círculo
+- **Planar**: Layout planar quando possível
+- **Shell**: Múltiplas camadas concêntricas
+- **Kamada-Kawai**: Algoritmo de posicionamento avançado
+
+### 📊 Exemplos de Visualizações Geradas:
+
+#### **Exemplo 1: Grafo Não Orientado com Caminho Hamiltoniano**
+- **Arquivo**: `assets/exemplo1_grafo_com_caminho.png`
+- **Descrição**: Grafo de 5 vértices com múltiplos caminhos hamiltonianos
+- **Caminho destacado**: 0 → 1 → 2 → 3 → 4
+- **Layout**: Spring
+
+#### **Exemplo 2: Grafo Orientado**
+- **Arquivo**: `assets/exemplo2_grafo_orientado.png`
+- **Descrição**: Grafo direcionado de 4 vértices
+- **Caminho destacado**: 0 → 1 → 2 → 3
+- **Layout**: Circular
+
+#### **Exemplo 3: Grafo sem Caminho Hamiltoniano**
+- **Arquivo**: `assets/exemplo3_grafo_sem_caminho.png`
+- **Descrição**: Grafo desconectado (componentes isolados)
+- **Status**: Nenhum caminho hamiltoniano possível
+- **Layout**: Spring
+
+#### **Exemplo 4: Grafo Completo K4**
+- **Arquivo**: `assets/exemplo4_grafo_completo_k4.png`
+- **Descrição**: Grafo completo com 4 vértices
+- **Caminho destacado**: 0 → 1 → 2 → 3
+- **Layout**: Circular
+
+### 🔧 Configurações Visuais:
+
+```python
+# Configurações padrão do visualizador
+config = {
+    'node_size': 800,           # Tamanho dos nós
+    'node_color': '#87CEEB',    # Cor dos nós
+    'edge_width': 2,            # Espessura das arestas
+    'path_width': 4,            # Espessura do caminho
+    'font_size': 12,            # Tamanho da fonte
+    'figure_size': (12, 8),     # Tamanho da figura
+    'dpi': 300                  # Resolução da imagem
+}
+```
 
 ## 🏗️ Estrutura do Projeto
 
 ```
 FPAA_Caminho_Hamiltoniano/
-├── main.py          # Programa principal
-├── README.md        # Documentação
-└── LICENSE          # Licença do projeto
+├── main.py                      # Programa principal
+├── view.py                      # Módulo de visualização
+├── exemplo_visualizacao.py      # Exemplo de uso da visualização
+├── requirements.txt             # Dependências para visualização
+├── README.md                   # Documentação completa
+├── LICENSE                     # Licença do projeto
+└── assets/                     # Pasta com visualizações geradas
+    ├── exemplo1_grafo_com_caminho.png
+    ├── exemplo2_grafo_orientado.png
+    ├── exemplo3_grafo_sem_caminho.png
+    ├── exemplo4_grafo_completo_k4.png
+    └── exemplo_personalizado.png
 ```
 
 ## 📋 Classes Principais
@@ -312,6 +460,17 @@ Classe que implementa o algoritmo de busca por caminhos hamiltonianos.
 **Métodos principais:**
 - `encontrar_caminho(vertice_inicial=None)` - Encontra um caminho hamiltoniano
 - `encontrar_todos_caminhos()` - Encontra todos os caminhos hamiltonianos possíveis
+
+### `VisualizadorGrafo` (view.py)
+Classe para visualização gráfica de grafos e caminhos hamiltonianos.
+
+**Métodos principais:**
+- `criar_networkx_graph()` - Converte Grafo para NetworkX
+- `calcular_layout(layout_type)` - Define disposição dos vértices
+- `desenhar_grafo_base()` - Desenha estrutura básica do grafo
+- `destacar_caminho_hamiltoniano(caminho)` - Realça o caminho encontrado
+- `visualizar_grafo_completo()` - Função principal de visualização
+- `salvar_imagem(nome_arquivo)` - Exporta visualização como PNG
 
 ## 🎯 Como Usar
 
@@ -410,8 +569,25 @@ Resultado: ❌ Nenhum caminho hamiltoniano
 
 ## 🔧 Requisitos
 
+### Requisitos Básicos (Algoritmo apenas):
 - **Python 3.6+**
 - Nenhuma biblioteca externa necessária (usa apenas bibliotecas padrão)
+
+### Requisitos Completos (Com visualização):
+- **Python 3.6+**
+- **NetworkX** >= 3.0 (manipulação de grafos)
+- **Matplotlib** >= 3.7.0 (visualização e exportação)
+- **NumPy** >= 1.24.0 (cálculos matemáticos)
+
+### Instalação das Dependências:
+
+```bash
+# Opção 1: Via requirements.txt (recomendado)
+pip install -r requirements.txt
+
+# Opção 2: Instalação manual
+pip install networkx matplotlib numpy
+```
 
 ## 🎨 Características do Código
 
@@ -422,56 +598,39 @@ Resultado: ❌ Nenhum caminho hamiltoniano
 - **Exemplos práticos** incluídos
 - **Suporte a diferentes tipos** de grafo
 
-## 📈 Possíveis Extensões
-
-- Implementação de heurísticas para acelerar a busca
-- Visualização gráfica dos grafos e caminhos
-- Suporte para grafos ponderados
-- Implementação do Problema do Caixeiro Viajante
-- Paralelização do algoritmo de busca
-- Geração automática de grafos de teste
-
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Sinta-se à vontade para:
-
-1. Fazer fork do projeto
-2. Criar uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abrir um Pull Request
-
-## 🎓 Contexto Acadêmico
-
-Este projeto foi desenvolvido como parte do estudo de **Fundamentos de Programação e Algoritmos Avançados (FPAA)**, demonstrando:
-
-- Implementação de algoritmos de grafos
-- Técnicas de backtracking
-- Análise de complexidade computacional
-- Estruturas de dados fundamentais
-- Boas práticas de programação
-- Classificação de problemas em classes de complexidade (P, NP, NP-Completo)
-
-### Objetivos de Aprendizagem Atingidos:
-
-1. **Compreensão teórica**: Entendimento das classes de complexidade e suas implicações
-2. **Implementação prática**: Codificação eficiente de algoritmos de backtracking
-3. **Análise matemática**: Determinação rigorosa de complexidade temporal
-4. **Pensamento crítico**: Avaliação de limitações e possíveis otimizações
-5. **Documentação técnica**: Elaboração de relatórios científicos completos
-
-## 📞 Suporte
-
-Para dúvidas, sugestões ou problemas, abra uma **issue** no repositório do projeto.
-
 ## 📄 Licença
 
 Este projeto está sob a licença especificada no arquivo `LICENSE`.
 
+
 ---
 
-**Desenvolvido com 💻 para fins educacionais e demonstração de algoritmos em teoria dos grafos.**
+## 🖼️ Galeria de Visualizações
 
-**Universidade**: Estudo em Fundamentos de Programação e Algoritmos Avançados  
-**Tema**: Algoritmos de Grafos e Complexidade Computacional  
-**Ano**: 2025
+O repositório inclui exemplos de visualizações geradas automaticamente na pasta `assets/`:
+
+### 📊 Imagens Disponíveis:
+- **`exemplo1_grafo_com_caminho.png`** - Grafo não orientado com múltiplos caminhos
+- **`exemplo2_grafo_orientado.png`** - Grafo direcionado com caminho único  
+- **`exemplo3_grafo_sem_caminho.png`** - Grafo desconectado sem solução
+- **`exemplo4_grafo_completo_k4.png`** - Grafo completo K4
+
+### 🎨 Características das Visualizações:
+- **Alta resolução** (300 DPI) para uso acadêmico
+- **Cores distintivas** para diferentes elementos
+- **Legendas explicativas** incluídas
+- **Informações textuais** sobre o grafo
+- **Layouts otimizados** para clareza visual
+
+### 📋 Como Reproduzir:
+```bash
+# Gerar todas as visualizações
+python view.py
+
+# Ou via menu interativo
+python main.py
+# Escolha opção 4: "Gerar visualizações de exemplo"
+```
+
+---
+
