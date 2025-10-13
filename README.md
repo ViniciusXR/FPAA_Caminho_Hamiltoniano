@@ -1,73 +1,170 @@
-# Algoritmo para Encontrar Caminho Hamiltoniano
+# FPAA_Caminho_Hamiltoniano
+Programa desenvolvido em Python que implementa o algoritmo para encontrar um Caminho Hamiltoniano em um grafo orientado ou não orientado, utilizando a abordagem de backtracking.
 
-Programa em Python que implementa o algoritmo para encontrar um Caminho Hamiltoniano em um grafo orientado ou não orientado.
+## Autor: Vinicius Xavier Ramalho
 
-## 📝 Descrição do Projeto
+## Índice
 
-Um **Caminho Hamiltoniano** em um grafo é um caminho que visita cada vértice exatamente uma vez. Encontrar esse caminho é um problema clássico em teoria dos grafos e está associado a problemas de alta complexidade computacional, como o Problema do Caixeiro Viajante.
+- [Implementação do Algoritmo de Caminho Hamiltoniano em Python](#implementação-do-algoritmo-de-caminho-hamiltoniano-em-python)
+- [O que é o Caminho Hamiltoniano](#o-que-é-o-caminho-hamiltoniano)
+- [Descrição do Projeto](#descrição-do-projeto)
+  - [Algoritmo e Lógica Implementada](#algoritmo-e-lógica-implementada)
+  - [Implementação das Principais Funções](#implementação-das-principais-funções)
+  - [Estruturas de Dados Utilizadas](#estruturas-de-dados-utilizadas)
+- [Sistema de Visualização](#sistema-de-visualização)
+  - [Características da Visualização](#características-da-visualização)
+  - [Exemplos de Visualizações Geradas](#exemplos-de-visualizações-geradas)
+- [Como Executar o Projeto](#como-executar-o-projeto)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Passo 1: Preparar o Ambiente](#passo-1-preparar-o-ambiente)
+  - [Passo 2: Executar o Programa](#passo-2-executar-o-programa)
+  - [Exemplo de Execução](#exemplo-de-execução)
+- [Funcionalidades do Programa](#funcionalidades-do-programa)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Classes Principais](#classes-principais)
+- [Relatório Técnico](#relatório-técnico)
+  - [Análise da Complexidade Computacional](#análise-da-complexidade-computacional)
+  - [Análise da Complexidade Assintótica de Tempo](#análise-da-complexidade-assintótica-de-tempo)
+  - [Aplicação do Teorema Mestre](#aplicação-do-teorema-mestre)
+  - [Análise dos Casos de Complexidade](#análise-dos-casos-de-complexidade)
+- [Requisitos](#requisitos)
+- [Características do Código](#características-do-código)
+- [Possíveis Extensões](#possíveis-extensões)
+- [Galeria de Visualizações](#galeria-de-visualizações)
+- [Contexto Acadêmico](#contexto-acadêmico)
+- [Contribuição](#contribuição)
+- [Versão do Python](#versão-do-python)
+- [Conclusão](#conclusão)
+- [Referências](#referências)
+- [Licença](#licença)
 
-Este projeto implementa uma abordagem para determinar se um Caminho Hamiltoniano existe em um grafo e, em caso afirmativo, encontrá-lo utilizando algoritmo de **backtracking**.
+# Implementação do Algoritmo de Caminho Hamiltoniano em Python
+
+O **Algoritmo de Caminho Hamiltoniano** é um método para encontrar um caminho que visita cada vértice de um grafo exatamente uma vez, desenvolvido utilizando a estratégia de **backtracking**. Este algoritmo explora sistematicamente todas as possibilidades, garantindo encontrar uma solução se ela existir, mas com complexidade exponencial devido à natureza NP-Completa do problema.
+
+## O que é o Caminho Hamiltoniano
+
+Um **Caminho Hamiltoniano** em um grafo é um caminho que visita cada vértice exatamente uma vez. Encontrar esse caminho é um problema clássico em teoria dos grafos e está associado a problemas de alta complexidade computacional, como o Problema do Caixeiro Viajante. Este problema pertence à classe **NP-Completo**, o que significa que não existe algoritmo conhecido que resolva o problema em tempo polinomial para todos os casos.
+
+## Descrição do Projeto
+
+O algoritmo implementado em `main.py` utiliza a abordagem recursiva do método de **backtracking** para realizar a busca eficiente do caminho hamiltoniano. A lógica do algoritmo pode ser explicada através de suas principais funções:
 
 ### Algoritmo e Lógica Implementada
 
 O algoritmo implementado utiliza a técnica de **backtracking** (retrocesso) para explorar sistematicamente todos os possíveis caminhos no grafo. A lógica principal está dividida nas seguintes funções:
 
-#### Principais Funções:
+### Implementação das Principais Funções:
 
-1. **`_backtrack(vertice_atual, posicao)`**:
-   - Função recursiva principal que implementa o algoritmo de backtracking
-   - Marca o vértice atual como visitado
-   - Verifica se todos os vértices foram visitados (condição de parada)
-   - Explora recursivamente todos os vértices adjacentes não visitados
-   - Desfaz as marcações quando não encontra solução (backtrack)
+#### 1. **`_backtrack(vertice_atual, posicao)`**:
+```python
+def _backtrack(self, vertice_atual, posicao):
+    # Marca o vértice atual como visitado
+    self.visitados[vertice_atual] = True
+    self.caminho[posicao] = vertice_atual
+    
+    # Se visitamos todos os vértices, encontramos um caminho hamiltoniano
+    if posicao == self.grafo.num_vertices - 1:
+        return True
+    
+    # Tenta todos os vértices adjacentes não visitados
+    for proximo_vertice in self.grafo.obter_adjacentes(vertice_atual):
+        if not self.visitados[proximo_vertice]:
+            if self._backtrack(proximo_vertice, posicao + 1):
+                return True
+    
+    # Backtrack: desfaz a escolha atual
+    self.visitados[vertice_atual] = False
+    self.caminho[posicao] = -1
+    return False
+```
 
-2. **`encontrar_caminho(vertice_inicial=None)`**:
-   - Interface principal para buscar um caminho hamiltoniano
-   - Permite especificar um vértice inicial ou tenta todos os vértices
-   - Inicializa as estruturas de controle (visitados, caminho)
-   - Retorna se encontrou um caminho e qual é o caminho
+**Função recursiva principal que implementa o algoritmo de backtracking:**
+- **Linha 2-3:** Marca o vértice atual como visitado e adiciona ao caminho
+- **Linha 5-7:** Verifica se todos os vértices foram visitados (condição de parada)
+- **Linha 9-12:** Explora recursivamente todos os vértices adjacentes não visitados
+- **Linha 14-16:** Desfaz as marcações quando não encontra solução (backtrack)
 
-3. **`encontrar_todos_caminhos()`**:
-   - Variação do algoritmo que encontra todos os caminhos hamiltonianos possíveis
-   - Utiliza backtracking modificado para não parar no primeiro caminho encontrado
-   - Útil para análise completa de grafos pequenos
+#### 2. **`encontrar_caminho(vertice_inicial=None)`**:
+```python
+def encontrar_caminho(self, vertice_inicial=None):
+    self.caminho = [-1] * self.grafo.num_vertices
+    self.visitados = [False] * self.grafo.num_vertices
+    
+    if vertice_inicial is not None:
+        if self._backtrack(vertice_inicial, 0):
+            return True, self.caminho.copy()
+        else:
+            return False, []
+    
+    # Tenta encontrar um caminho começando de cada vértice
+    for vertice in range(self.grafo.num_vertices):
+        self.caminho = [-1] * self.grafo.num_vertices
+        self.visitados = [False] * self.grafo.num_vertices
+        
+        if self._backtrack(vertice, 0):
+            return True, self.caminho.copy()
+    
+    return False, []
+```
 
-#### Estruturas de Dados Utilizadas:
+**Interface principal para buscar um caminho hamiltoniano:**
+- **Linha 2-3:** Inicializa as estruturas de controle (visitados, caminho)
+- **Linha 5-8:** Permite especificar um vértice inicial específico
+- **Linha 10-16:** Tenta todos os vértices como ponto de partida
+- **Linha 18:** Retorna se encontrou um caminho e qual é o caminho
+
+#### 3. **`encontrar_todos_caminhos()`**:
+```python
+def encontrar_todos_caminhos(self):
+    todos_caminhos = []
+    
+    def _backtrack_todos(vertice_atual, posicao, caminho_atual):
+        self.visitados[vertice_atual] = True
+        caminho_atual[posicao] = vertice_atual
+        
+        if posicao == self.grafo.num_vertices - 1:
+            todos_caminhos.append(caminho_atual.copy())
+        else:
+            for proximo_vertice in self.grafo.obter_adjacentes(vertice_atual):
+                if not self.visitados[proximo_vertice]:
+                    _backtrack_todos(proximo_vertice, posicao + 1, caminho_atual)
+        
+        # Backtrack
+        self.visitados[vertice_atual] = False
+        caminho_atual[posicao] = -1
+    
+    for vertice_inicial in range(self.grafo.num_vertices):
+        self.visitados = [False] * self.grafo.num_vertices
+        caminho_temp = [-1] * self.grafo.num_vertices
+        _backtrack_todos(vertice_inicial, 0, caminho_temp)
+    
+    return todos_caminhos
+```
+
+**Variação do algoritmo que encontra todos os caminhos hamiltonianos possíveis:**
+- **Linha 4-17:** Utiliza backtracking modificado para não parar no primeiro caminho encontrado
+- **Linha 19-23:** Tenta todos os vértices como ponto de partida para encontrar múltiplas soluções
+- **Útil para análise completa de grafos pequenos**
+
+### Estruturas de Dados Utilizadas:
 
 - **Matriz de Adjacência**: Representa as conexões do grafo de forma eficiente
 - **Array de Visitados**: Controla quais vértices já foram visitados no caminho atual
 - **Array do Caminho**: Armazena a sequência de vértices que formam o caminho hamiltoniano
 
-## 🚀 Como Executar o Projeto
+## Como Executar o Projeto
 
 ### Pré-requisitos
 
 - **Python 3.6+** instalado no sistema
+- Terminal ou prompt de comando
 - **Bibliotecas opcionais** para visualização (recomendado):
   - NetworkX >= 3.0
   - Matplotlib >= 3.7.0
   - NumPy >= 1.24.0
 
-### Instalação das Dependências
-
-**Para funcionalidade básica** (apenas algoritmo):
-```bash
-# Nenhuma instalação necessária - usa apenas bibliotecas padrão do Python
-python main.py
-```
-
-**Para funcionalidade completa** (com visualização):
-```bash
-# Instala as dependências de visualização
-pip install -r requirements.txt
-```
-
-Ou instale manualmente:
-```bash
-pip install networkx matplotlib numpy
-```
-
-### Instruções para Execução Local
+### Passo 1: Preparar o Ambiente
 
 1. **Clone ou baixe o repositório**:
    ```bash
@@ -75,28 +172,77 @@ pip install networkx matplotlib numpy
    cd FPAA_Caminho_Hamiltoniano
    ```
 
-2. **Instale as dependências (opcional, mas recomendado)**:
+2. **(Opcional) Criar um ambiente virtual**:
+   ```bash
+   python -m venv .venv
+   ```
+
+3. **(Opcional) Ativar o ambiente virtual**:
+   - No Windows:
+   ```bash
+   .venv\Scripts\activate
+   ```
+   - No macOS/Linux:
+   ```bash
+   source .venv/bin/activate
+   ```
+
+4. **Instalar dependências (opcional, mas recomendado para visualização)**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Execute o programa principal**:
+   Ou instale manualmente:
    ```bash
-   python main.py
+   pip install networkx matplotlib numpy
    ```
 
-4. **Navegue pelo menu interativo**:
-   - O programa apresentará um menu com 5 opções
-   - Escolha a opção desejada digitando o número correspondente
-   - Siga as instruções na tela para cada funcionalidade
+### Passo 2: Executar o Programa
 
-### Opções Disponíveis:
+Execute o arquivo principal:
+```bash
+python main.py
+```
 
-- **Opção 1**: Criar grafo personalizado (permite definir vértices e arestas)
-- **Opção 2**: Executar exemplos predefinidos (demonstra diferentes cenários)
-- **Opção 3**: Testar grafo completo (testa grafos completos K_n)
-- **Opção 4**: Gerar visualizações de exemplo (cria imagens PNG dos grafos)
-- **Opção 5**: Sair do programa
+### Exemplo de Execução:
+
+```bash
+PS C:\...\FPAA_Caminho_Hamiltoniano> python main.py
+
+============================================================
+ALGORITMO PARA ENCONTRAR CAMINHO HAMILTONIANO
+============================================================
+
+Opções:
+1. Criar grafo personalizado
+2. Executar exemplos predefinidos
+3. Testar grafo completo
+4. Gerar visualizações de exemplo
+5. Sair
+
+Escolha uma opção (1-5): 2
+
+============================================================
+EXECUTANDO EXEMPLOS PREDEFINIDOS
+============================================================
+
+=== Exemplo 1: Grafo Não Orientado com Caminho Hamiltoniano ===
+
+--- Busca por Caminho Hamiltoniano: Exemplo 1 ---
+✓ Caminho Hamiltoniano encontrado: 0 -> 1 -> 2 -> 3 -> 4
+  Total de caminhos hamiltonianos: 14
+
+📊 Criando visualização: Exemplo 1
+✓ Visualização salva em: assets\exemplo1_grafo_com_caminho.png
+
+=== Exemplo 2: Grafo Orientado ===
+
+--- Busca por Caminho Hamiltoniano: Exemplo 2 ---
+✓ Caminho Hamiltoniano encontrado: 0 -> 1 -> 2 -> 3
+
+📊 Criando visualização: Exemplo 2
+✓ Visualização salva em: assets\exemplo2_grafo_orientado.png
+```
 
 ### 📊 Funcionalidades de Visualização
 
@@ -124,37 +270,6 @@ python view.py
 **Opção 3**: Automática durante execução
 - As visualizações são geradas automaticamente ao executar exemplos
 - Imagens salvas na pasta `assets/`
-
-### Exemplo de Execução:
-
-```bash
-PS C:\...\FPAA_Caminho_Hamiltoniano> python main.py
-
-============================================================
-ALGORITMO PARA ENCONTRAR CAMINHO HAMILTONIANO
-============================================================
-
-Opções:
-1. Criar grafo personalizado
-2. Executar exemplos predefinidos
-3. Testar grafo completo
-4. Gerar visualizações de exemplo
-5. Sair
-
-Escolha uma opção (1-5): 4
-
-============================================================
-GERANDO VISUALIZAÇÕES DE EXEMPLO
-============================================================
-
-Deseja continuar? (s/n): s
-
-1. Criando exemplo: Grafo com Caminho Hamiltoniano
-✓ Visualização salva em: assets\exemplo1_grafo_com_caminho.png
-
-2. Criando exemplo: Grafo Orientado  
-✓ Visualização salva em: assets\exemplo2_grafo_orientado.png
-```
 ```
 
 ---
@@ -340,9 +455,7 @@ O algoritmo implementado oferece uma solução exata para o Problema do Caminho 
 - Exemplos demonstrativos de diferentes cenários
 - Código modular e extensível para futuras melhorias
 
----
-
-## 🚀 Funcionalidades do Programa
+## Funcionalidades do Programa
 
 - ✅ Suporte para grafos **orientados** e **não orientados**
 - ✅ Busca por **um caminho hamiltoniano**
@@ -356,281 +469,389 @@ O algoritmo implementado oferece uma solução exata para o Problema do Caminho 
 - ✅ **Exportação de imagens** PNG de alta qualidade
 - ✅ **Destaque automático** de Caminhos Hamiltonianos encontrados
 
-## 🎨 Sistema de Visualização
+### Opções do Menu Interativo:
+
+- **Opção 1**: Criar grafo personalizado (permite definir vértices e arestas)
+- **Opção 2**: Executar exemplos predefinidos (demonstra diferentes cenários)
+- **Opção 3**: Testar grafo completo (testa grafos completos K_n)
+- **Opção 4**: Gerar visualizações de exemplo (cria imagens PNG dos grafos)
+- **Opção 5**: Sair do programa
+
+## Sistema de Visualização
 
 O projeto inclui um módulo completo de visualização (`view.py`) que utiliza **NetworkX** e **Matplotlib** para criar representações gráficas dos grafos e destacar os Caminhos Hamiltonianos.
 
 ### Características da Visualização:
 
 #### 🎯 **Elementos Visuais:**
-- **Nós (Vértices)**: Círculos coloridos com números identificadores
-- **Arestas**: Linhas conectando os vértices
-- **Direcionamento**: Setas para grafos orientados
-- **Legenda**: Explicação dos elementos visuais
+- **Nós destacados**: Diferentes cores para início, fim e nós intermediários
+- **Arestas do caminho**: Destacadas em vermelho para visualizar o percurso
+- **Numeração sequencial**: Mostra a ordem dos vértices no caminho
+- **Múltiplos layouts**: Spring, circular, shell e random para diferentes perspectivas
 
-#### 🌈 **Sistema de Cores:**
-- **Nós normais**: Azul claro (`#87CEEB`)
-- **Início do caminho**: Verde (`#32CD32`)
-- **Fim do caminho**: Vermelho (`#FF6347`)
-- **Nós intermediários**: Dourado (`#FFD700`)
-- **Arestas normais**: Cinza (`#696969`)
-- **Caminho Hamiltoniano**: Laranja-vermelho (`#FF4500`)
+#### 📊 **Layouts Disponíveis:**
+- **Spring Layout**: Posicionamento baseado em forças físicas
+- **Circular Layout**: Vértices dispostos em círculo
+- **Shell Layout**: Múltiplas camadas concêntricas
+- **Random Layout**: Posicionamento aleatório
 
-#### 📐 **Layouts Disponíveis:**
-- **Spring**: Distribuição baseada em forças físicas (padrão)
-- **Circular**: Vértices dispostos em círculo
-- **Planar**: Layout planar quando possível
-- **Shell**: Múltiplas camadas concêntricas
-- **Kamada-Kawai**: Algoritmo de posicionamento avançado
+#### 💾 **Exportação:**
+- **Formato PNG**: Imagens de alta qualidade (300 DPI)
+- **Resolução**: 1200x900 pixels para clareza
+- **Salvamento automático**: Na pasta `assets/` do projeto
 
-### 📊 Exemplos de Visualizações Geradas:
+## Instalação
 
-#### **Exemplo 1: Grafo Não Orientado com Caminho Hamiltoniano**
-- **Arquivo**: `assets/exemplo1_grafo_com_caminho.png`
-- **Descrição**: Grafo de 5 vértices com múltiplos caminhos hamiltonianos
-- **Caminho destacado**: 0 → 1 → 2 → 3 → 4
-- **Layout**: Spring
+### Pré-requisitos
 
-#### **Exemplo 2: Grafo Orientado**
-- **Arquivo**: `assets/exemplo2_grafo_orientado.png`
-- **Descrição**: Grafo direcionado de 4 vértices
-- **Caminho destacado**: 0 → 1 → 2 → 3
-- **Layout**: Circular
+- **Python 3.6 ou superior**
 
-#### **Exemplo 3: Grafo sem Caminho Hamiltoniano**
-- **Arquivo**: `assets/exemplo3_grafo_sem_caminho.png`
-- **Descrição**: Grafo desconectado (componentes isolados)
-- **Status**: Nenhum caminho hamiltoniano possível
-- **Layout**: Spring
+### Instalação das Dependências
 
-#### **Exemplo 4: Grafo Completo K4**
-- **Arquivo**: `assets/exemplo4_grafo_completo_k4.png`
-- **Descrição**: Grafo completo com 4 vértices
-- **Caminho destacado**: 0 → 1 → 2 → 3
-- **Layout**: Circular
-
-### 🔧 Configurações Visuais:
-
-```python
-# Configurações padrão do visualizador
-config = {
-    'node_size': 800,           # Tamanho dos nós
-    'node_color': '#87CEEB',    # Cor dos nós
-    'edge_width': 2,            # Espessura das arestas
-    'path_width': 4,            # Espessura do caminho
-    'font_size': 12,            # Tamanho da fonte
-    'figure_size': (12, 8),     # Tamanho da figura
-    'dpi': 300                  # Resolução da imagem
-}
-```
-
-## 🏗️ Estrutura do Projeto
-
-```
-FPAA_Caminho_Hamiltoniano/
-├── main.py                      # Programa principal
-├── view.py                      # Módulo de visualização
-├── exemplo_visualizacao.py      # Exemplo de uso da visualização
-├── requirements.txt             # Dependências para visualização
-├── README.md                   # Documentação completa
-├── LICENSE                     # Licença do projeto
-└── assets/                     # Pasta com visualizações geradas
-    ├── exemplo1_grafo_com_caminho.png
-    ├── exemplo2_grafo_orientado.png
-    ├── exemplo3_grafo_sem_caminho.png
-    ├── exemplo4_grafo_completo_k4.png
-    └── exemplo_personalizado.png
-```
-
-## 📋 Classes Principais
-
-### `Grafo`
-Classe para representar um grafo que pode ser orientado ou não orientado.
-
-**Métodos principais:**
-- `adicionar_aresta(origem, destino)` - Adiciona uma aresta
-- `remover_aresta(origem, destino)` - Remove uma aresta
-- `tem_aresta(origem, destino)` - Verifica se existe aresta
-- `obter_adjacentes(vertice)` - Obtém vértices adjacentes
-- `imprimir_grafo()` - Exibe representação do grafo
-
-### `CaminhoHamiltoniano`
-Classe que implementa o algoritmo de busca por caminhos hamiltonianos.
-
-**Métodos principais:**
-- `encontrar_caminho(vertice_inicial=None)` - Encontra um caminho hamiltoniano
-- `encontrar_todos_caminhos()` - Encontra todos os caminhos hamiltonianos possíveis
-
-### `VisualizadorGrafo` (view.py)
-Classe para visualização gráfica de grafos e caminhos hamiltonianos.
-
-**Métodos principais:**
-- `criar_networkx_graph()` - Converte Grafo para NetworkX
-- `calcular_layout(layout_type)` - Define disposição dos vértices
-- `desenhar_grafo_base()` - Desenha estrutura básica do grafo
-- `destacar_caminho_hamiltoniano(caminho)` - Realça o caminho encontrado
-- `visualizar_grafo_completo()` - Função principal de visualização
-- `salvar_imagem(nome_arquivo)` - Exporta visualização como PNG
-
-## 🎯 Como Usar
-
-### Execução Básica
+Para utilizar as funcionalidades de **visualização**, você precisa instalar as dependências:
 
 ```bash
-python main.py
-```
-
-### Menu Interativo
-
-O programa oferece um menu com as seguintes opções:
-
-1. **Criar grafo personalizado** - Permite criar um grafo customizado
-2. **Executar exemplos predefinidos** - Demonstra diferentes cenários
-3. **Testar grafo completo** - Testa grafos completos K_n
-4. **Sair** - Encerra o programa
-
-### Exemplos de Uso
-
-#### Exemplo 1: Criando um Grafo Personalizado
-
-```python
-# Criar um grafo não orientado com 4 vértices
-grafo = Grafo(4, orientado=False)
-
-# Adicionar arestas
-grafo.adicionar_aresta(0, 1)
-grafo.adicionar_aresta(1, 2)
-grafo.adicionar_aresta(2, 3)
-grafo.adicionar_aresta(3, 0)
-
-# Buscar caminho hamiltoniano
-algoritmo = CaminhoHamiltoniano(grafo)
-encontrou, caminho = algoritmo.encontrar_caminho()
-
-if encontrou:
-    print(f"Caminho encontrado: {' -> '.join(map(str, caminho))}")
-else:
-    print("Nenhum caminho hamiltoniano encontrado")
-```
-
-#### Exemplo 2: Grafo Orientado
-
-```python
-# Criar um grafo orientado
-grafo = Grafo(3, orientado=True)
-grafo.adicionar_aresta(0, 1)
-grafo.adicionar_aresta(1, 2)
-
-algoritmo = CaminhoHamiltoniano(grafo)
-encontrou, caminho = algoritmo.encontrar_caminho()
-```
-
-## 🧩 Algoritmo
-
-O programa utiliza **algoritmo de backtracking** para encontrar caminhos hamiltonianos:
-
-1. **Inicialização**: Marca todos os vértices como não visitados
-2. **Recursão**: Para cada vértice atual:
-   - Marca como visitado
-   - Adiciona ao caminho atual
-   - Se todos os vértices foram visitados → caminho encontrado
-   - Senão, tenta todos os vértices adjacentes não visitados
-3. **Backtrack**: Se não encontra solução, desfaz a escolha atual
-4. **Repetição**: Tenta diferentes vértices como ponto de partida
-
-### Complexidade
-- **Tempo**: O(n!) no pior caso, onde n é o número de vértices
-- **Espaço**: O(n) para armazenar o caminho e vértices visitados
-
-## 📊 Exemplos Predefinidos
-
-O programa inclui exemplos que demonstram diferentes cenários:
-
-### Exemplo 1: Grafo com Caminho Hamiltoniano
-```
-Vértices: 5 (0, 1, 2, 3, 4)
-Arestas: (0,1), (1,2), (2,3), (3,4), (1,3), (0,4)
-Resultado: ✅ Múltiplos caminhos encontrados
-```
-
-### Exemplo 2: Grafo Orientado
-```
-Vértices: 4 (0, 1, 2, 3)
-Arestas: (0→1), (1→2), (2→3), (0→3)
-Resultado: ✅ Caminho: 0 → 1 → 2 → 3
-```
-
-### Exemplo 3: Grafo sem Caminho
-```
-Vértices: 4 (0, 1, 2, 3)
-Arestas: (0,1), (2,3) [grafo desconectado]
-Resultado: ❌ Nenhum caminho hamiltoniano
-```
-
-## 🔧 Requisitos
-
-### Requisitos Básicos (Algoritmo apenas):
-- **Python 3.6+**
-- Nenhuma biblioteca externa necessária (usa apenas bibliotecas padrão)
-
-### Requisitos Completos (Com visualização):
-- **Python 3.6+**
-- **NetworkX** >= 3.0 (manipulação de grafos)
-- **Matplotlib** >= 3.7.0 (visualização e exportação)
-- **NumPy** >= 1.24.0 (cálculos matemáticos)
-
-### Instalação das Dependências:
-
-```bash
-# Opção 1: Via requirements.txt (recomendado)
 pip install -r requirements.txt
-
-# Opção 2: Instalação manual
-pip install networkx matplotlib numpy
 ```
 
-## 🎨 Características do Código
+**Nota**: O programa pode ser executado **sem as dependências de visualização**. Neste caso, apenas as funcionalidades básicas do algoritmo estarão disponíveis.
 
-- **Documentação completa** com docstrings
-- **Tratamento de erros** robusto
-- **Interface amigável** com menu interativo
-- **Código modular** e reutilizável
-- **Exemplos práticos** incluídos
-- **Suporte a diferentes tipos** de grafo
+### Dependências Específicas
 
-## 📄 Licença
+```
+networkx>=3.0        # Manipulação e criação de grafos
+matplotlib>=3.7.0    # Visualização e plotagem
+numpy>=1.24.0        # Operações matemáticas
+```
 
-Este projeto está sob a licença especificada no arquivo `LICENSE`.
+## Como Usar
 
+### 1. Execução Básica
 
----
-
-## 🖼️ Galeria de Visualizações
-
-O repositório inclui exemplos de visualizações geradas automaticamente na pasta `assets/`:
-
-### 📊 Imagens Disponíveis:
-- **`exemplo1_grafo_com_caminho.png`** - Grafo não orientado com múltiplos caminhos
-- **`exemplo2_grafo_orientado.png`** - Grafo direcionado com caminho único  
-- **`exemplo3_grafo_sem_caminho.png`** - Grafo desconectado sem solução
-- **`exemplo4_grafo_completo_k4.png`** - Grafo completo K4
-
-### 🎨 Características das Visualizações:
-- **Alta resolução** (300 DPI) para uso acadêmico
-- **Cores distintivas** para diferentes elementos
-- **Legendas explicativas** incluídas
-- **Informações textuais** sobre o grafo
-- **Layouts otimizados** para clareza visual
-
-### 📋 Como Reproduzir:
 ```bash
-# Gerar todas as visualizações
-python view.py
-
-# Ou via menu interativo
 python main.py
-# Escolha opção 4: "Gerar visualizações de exemplo"
 ```
 
----
+### 2. Interface do Menu
+
+Após executar o programa, você verá o seguinte menu:
+
+```
+=== CAMINHO HAMILTONIANO ===
+1. Criar grafo personalizado
+2. Executar exemplos predefinidos
+3. Testar grafo completo
+4. Gerar visualizações de exemplo
+5. Sair
+
+Escolha uma opção:
+```
+
+### 3. Criando um Grafo Personalizado (Opção 1)
+
+```
+Número de vértices: 4
+Grafo orientado? (s/n): n
+Digite as arestas (formato: a b), ou 'fim' para terminar:
+0 1
+1 2
+2 3
+3 0
+fim
+```
+
+### 4. Executando Exemplos Predefinidos (Opção 2)
+
+O programa executará automaticamente vários exemplos demonstrativos:
+- Grafos com Caminho Hamiltoniano
+- Grafos sem Caminho Hamiltoniano
+- Grafos orientados e não orientados
+
+### 5. Gerando Visualizações (Opção 4)
+
+Esta opção criará **13 imagens PNG** na pasta `assets/`, mostrando:
+- Diferentes tipos de grafos
+- Múltiplos layouts de visualização
+- Caminhos Hamiltonianos destacados
+
+## Implementação Linha por Linha
+
+### Estrutura Principal
+
+O programa está organizado em duas classes principais:
+
+```python
+class Grafo:
+    def __init__(self, num_vertices, orientado=False):
+        """
+        Inicializa um grafo com número específico de vértices.
+        
+        Args:
+            num_vertices (int): Número de vértices do grafo
+            orientado (bool): True se o grafo for orientado, False caso contrário
+        """
+        self.num_vertices = num_vertices
+        self.orientado = orientado
+        # Matriz de adjacência inicializada com zeros
+        self.matriz_adj = [[0] * num_vertices for _ in range(num_vertices)]
+    
+    def adicionar_aresta(self, origem, destino):
+        """
+        Adiciona uma aresta entre dois vértices.
+        
+        Args:
+            origem (int): Vértice de origem
+            destino (int): Vértice de destino
+        """
+        self.matriz_adj[origem][destino] = 1
+        # Para grafos não orientados, adiciona aresta nos dois sentidos
+        if not self.orientado:
+            self.matriz_adj[destino][origem] = 1
+```
+
+#### 2. Classe `CaminhoHamiltoniano`
+
+Esta classe implementa o algoritmo de backtracking para encontrar caminhos hamiltonianos:
+
+```python
+class CaminhoHamiltoniano:
+    def __init__(self, grafo):
+        """
+        Inicializa o buscador de caminhos hamiltonianos.
+        
+        Args:
+            grafo (Grafo): Instância do grafo a ser analisado
+        """
+        self.grafo = grafo
+        self.num_vertices = grafo.num_vertices
+    
+    def buscar_um_caminho(self, inicio=0):
+        """
+        Busca um caminho hamiltoniano a partir de um vértice específico.
+        
+        Args:
+            inicio (int): Vértice inicial do caminho
+            
+        Returns:
+            list: Caminho hamiltoniano encontrado ou None se não existir
+        """
+        caminho = [-1] * self.num_vertices
+        visitados = [False] * self.num_vertices
+        
+        # Marca o vértice inicial como visitado
+        caminho[0] = inicio
+        visitados[inicio] = True
+        
+        # Inicia a busca recursiva
+        if self._buscar_recursivo(caminho, visitados, 1):
+            return caminho
+        return None
+    
+    def _buscar_recursivo(self, caminho, visitados, pos):
+        """
+        Método recursivo principal do backtracking.
+        
+        Args:
+            caminho (list): Caminho atual sendo construído
+            visitados (list): Lista de vértices já visitados
+            pos (int): Posição atual no caminho
+            
+        Returns:
+            bool: True se encontrou um caminho hamiltoniano, False caso contrário
+        """
+        # Condição de parada: visitou todos os vértices
+        if pos == self.num_vertices:
+            return True
+        
+        # Tenta cada vértice não visitado
+        for v in range(self.num_vertices):
+            if self._pode_adicionar(caminho[pos-1], v, visitados):
+                # Adiciona vértice ao caminho
+                caminho[pos] = v
+                visitados[v] = True
+                
+                # Chamada recursiva
+                if self._buscar_recursivo(caminho, visitados, pos + 1):
+                    return True
+                
+                # Backtrack: remove vértice do caminho
+                visitados[v] = False
+        
+        return False
+    
+    def _pode_adicionar(self, ultimo, novo, visitados):
+        """
+        Verifica se um vértice pode ser adicionado ao caminho.
+        
+        Args:
+            ultimo (int): Último vértice do caminho atual
+            novo (int): Novo vértice a ser testado
+            visitados (list): Lista de vértices já visitados
+            
+        Returns:
+            bool: True se o vértice pode ser adicionado, False caso contrário
+        """
+        # Verifica se existe aresta entre último e novo vértice
+        if self.grafo.matriz_adj[ultimo][novo] == 0:
+            return False
+        
+        # Verifica se o vértice já foi visitado
+        if visitados[novo]:
+            return False
+        
+        return True
+```
+
+### Algoritmo de Backtracking
+
+O algoritmo utiliza **backtracking** para explorar sistematicamente todas as possibilidades:
+
+#### **Passos do Algoritmo:**
+
+1. **Inicialização**: Marca o vértice inicial como visitado
+2. **Expansão**: Para cada posição no caminho, tenta todos os vértices não visitados
+3. **Validação**: Verifica se existe aresta entre o último vértice e o candidato
+4. **Recursão**: Chama recursivamente para a próxima posição
+5. **Backtrack**: Se não encontra solução, desfaz a escolha e tenta outra
+
+#### **Condições de Parada:**
+
+- **Sucesso**: Quando todos os vértices foram visitados exatamente uma vez
+- **Falha**: Quando não há mais vértices válidos para adicionar ao caminho
+
+### Visualização Integrada
+
+O sistema integra automaticamente a visualização quando as dependências estão disponíveis:
+
+```python
+# Verifica se as bibliotecas de visualização estão disponíveis
+try:
+    from view import VisualizadorGrafo
+    VISUALIZACAO_DISPONIVEL = True
+except ImportError:
+    VISUALIZACAO_DISPONIVEL = False
+    print("Aviso: Bibliotecas de visualização não encontradas.")
+    print("Execute: pip install -r requirements.txt")
+
+# Integração no menu principal
+if VISUALIZACAO_DISPONIVEL:
+    visualizador = VisualizadorGrafo()
+    visualizador.visualizar_grafo(grafo_exemplo, caminho_encontrado)
+```
+
+## Relatório Técnico
+### Análise de Complexidade
+
+#### **Complexidade Temporal**
+
+O problema do Caminho Hamiltoniano é classificado como **NP-Completo**, o que significa que não existe algoritmo conhecido que o resolva em tempo polinomial para o caso geral.
+
+**Análise do Backtracking:**
+- **Pior caso**: O(n!) onde n é o número de vértices
+- **Melhor caso**: O(n) quando o caminho é encontrado na primeira tentativa
+- **Caso médio**: Depende da estrutura do grafo e conectividade
+
+**Justificativa da Complexidade O(n!):**
+- No pior caso, testamos todas as permutações possíveis dos vértices
+- Para n vértices, existem n! permutações possíveis
+- Cada permutação requer O(n) operações para validação
+- Complexidade total: O(n! × n) ≈ O(n!)
+
+#### **Complexidade Espacial**
+
+- **Espaço principal**: O(n) para armazenar o caminho atual
+- **Espaço auxiliar**: O(n) para a lista de vértices visitados
+- **Pilha de recursão**: O(n) no máximo (profundidade máxima = n)
+- **Complexidade total**: O(n)
+
+#### **Otimizações Implementadas**
+
+1. **Verificação prévia de adjacência**: Evita explorações desnecessárias
+2. **Backtracking eficiente**: Desfaz escolhas apenas quando necessário
+3. **Representação por matriz**: Acesso O(1) para verificar arestas
+4. **Parada antecipada**: Termina ao encontrar o primeiro caminho (modo busca única)
+
+### Casos de Teste
+
+#### **Teste 1: Grafo Completo K4**
+```
+Entrada: Grafo completo com 4 vértices
+Resultado: ✅ Múltiplos caminhos hamiltonianos
+Tempo: O(n) - encontrado rapidamente
+```
+
+#### **Teste 2: Grafo Linear**
+```
+Entrada: 0-1-2-3 (caminho linear)
+Resultado: ✅ Caminho único: 0→1→2→3
+Tempo: O(n) - estrutura simples
+```
+
+#### **Teste 3: Grafo Desconectado**
+```
+Entrada: Componentes isolados (0-1) e (2-3)
+Resultado: ❌ Impossível visitar todos os vértices
+Tempo: O(1) - detectado rapidamente
+```
+
+#### **Teste 4: Grafo Orientado**
+```
+Entrada: Grafo direcionado com ciclo
+Resultado: ✅ Caminho encontrado respeitando direções
+Tempo: Varia conforme conectividade
+```
+
+### Limitações e Considerações
+
+#### **Limitações Algorítmicas**
+- **Exponencial**: Impraticável para grafos com mais de ~15-20 vértices
+- **Memória**: Pode esgotar pilha de recursão em grafos muito grandes
+- **Determinístico**: Sempre encontra o mesmo caminho para entrada idêntica
+
+#### **Limitações de Implementação**
+- **Matriz de adjacência**: Usa O(n²) de memória sempre
+- **Recursão**: Limitada pela profundidade máxima da pilha
+- **Entrada manual**: Interface simples, adequada para fins didáticos
+
+#### **Melhorias Possíveis**
+- **Lista de adjacência**: Para grafos esparsos (menor uso de memória)
+- **Paralelização**: Explorar múltiplos caminhos simultaneamente
+- **Heurísticas**: Ordenar vértices por grau para busca mais eficiente
+- **Iterativo**: Substituir recursão por pilha explícita
+
+### Aplicações Práticas
+
+#### **Problemas Relacionados**
+- **Caixeiro Viajante**: Extensão que retorna ao vértice inicial
+- **Planejamento de rotas**: Visitar todos os pontos exatamente uma vez
+- **Análise de circuitos**: Verificar conectividade em componentes eletrônicos
+- **Jogos de tabuleiro**: Movimentos que cobrem todas as casas
+
+#### **Casos de Uso**
+- **Educacional**: Demonstração de algoritmos de backtracking
+- **Pesquisa**: Base para algoritmos mais sofisticados
+- **Validação**: Teste de conectividade em pequenos grafos
+- **Prototipagem**: Implementação rápida para validar conceitos
+
+## Conclusão
+
+Este projeto implementa uma solução completa para o problema do Caminho Hamiltoniano, combinando:
+
+### **Características Técnicas**
+- **Algoritmo robusto**: Backtracking com otimizações
+- **Interface intuitiva**: Menu interativo para facilidade de uso
+- **Visualização avançada**: Representação gráfica com NetworkX/Matplotlib
+- **Documentação completa**: Análise detalhada de complexidade
+
+### **Valor Educacional**
+- **Demonstração prática**: De conceitos de teoria dos grafos
+- **Análise de algoritmos**: Complexidade temporal e espacial detalhada
+- **Implementação clara**: Código bem documentado e estruturado
+- **Exemplos diversos**: Casos de teste abrangentes
+
+### **Extensibilidade**
+- **Modular**: Fácil de estender com novos algoritmos
+- **Configurável**: Parâmetros ajustáveis de visualização
+- **Compatível**: Funciona com e sem dependências visuais
+- **Escalável**: Base sólida para implementações mais complexas
 
