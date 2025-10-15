@@ -330,7 +330,7 @@ class VisualizadorGrafo:
                     verticalalignment='bottom',
                     bbox=dict(boxstyle='round,pad=0.5', facecolor='lightgray', alpha=0.8))
     
-    def salvar_imagem(self, nome_arquivo: str, pasta_destino: str = 'assets'):
+    def salvar_imagem(self, nome_arquivo: str, pasta_destino: str = 'imagens'):
         """
         Salva a visualização como imagem PNG.
         
@@ -527,7 +527,7 @@ def criar_visualizacoes_exemplo():
         print(f"  Status: {status}{caminho_str}")
         print()
     
-    print("Todas as visualizações foram salvas na pasta 'assets/'")
+    print("Todas as visualizações foram salvas na pasta 'imagens/'")
     return exemplos
 
 

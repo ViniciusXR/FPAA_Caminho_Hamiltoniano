@@ -269,8 +269,7 @@ python view.py
 
 **Opção 3**: Automática durante execução
 - As visualizações são geradas automaticamente ao executar exemplos
-- Imagens salvas na pasta `assets/`
-```
+- Imagens salvas na pasta `imagens/`
 
 ---
 
